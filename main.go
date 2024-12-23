@@ -9,15 +9,21 @@ type ContaCorrente struct {
 	saldo         float64
 }
 
-func (c *ContaCorrente) Sacar(valorSaque float64) string {
+func (c *ContaCorrente) Sacar(valorSaque float64) (string, float64) {
 	podeSacar := valorSaque > 0 && valorSaque <= c.saldo
 
 	if podeSacar {
 		c.saldo -= valorSaque
-		return "Saque realizado com sucesso"
+		return "Saque realizado com sucesso", c.saldo
 	}
 
-	return "Saldo insuficiente"
+	return "Saldo insuficiente", c.saldo
+}
+
+func (c *ContaCorrente) Depositar(valorDeposito float64) {
+	if valorDeposito > 0 {
+		c.saldo += valorDeposito
+	}
 }
 
 func main() {
@@ -26,7 +32,11 @@ func main() {
 
 	fmt.Println(contaCorrente.saldo)
 
-	var msg = contaCorrente.Sacar(200)
+	msg, saldo := contaCorrente.Sacar(200)
 
-	fmt.Println(msg)
+	fmt.Println(msg, saldo)
+
+	contaCorrente.Depositar(1000)
+	fmt.Println(contaCorrente)
+
 }
